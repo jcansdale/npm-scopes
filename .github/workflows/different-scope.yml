@@ -5,11 +5,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Create unscoped package
+    - name: Create different scoped package
       run: |
         cat > package.json <<- EOM
         {
-          "name": "@${{ github.repository_owner }}/owner-scope",
+          "name": "@different/scope",
           "version": "1.0.0-${{ github.sha }}",
           "repository": "https://github.com/${{ github.repository }}"
         }
@@ -19,7 +19,6 @@ jobs:
         cat > .npmrc <<- EOM
         //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}
         registry=https://npm.pkg.github.com/@${{ github.repository_owner }}
-        @${{ github.repository_owner }}:registry=https://npm.pkg.github.com
         EOM
     - name: Publish unscoped package
       run: npm publish
@@ -28,4 +27,4 @@ jobs:
       run: rm package.json
 
     - name: Restore the package
-      run: npm install @${{ github.repository_owner }}/owner-scope@1.0.0-${{ github.sha }}
+      run: npm install @${{ github.repository_owner }}/@different/scope@1.0.0-${{ github.sha }}
