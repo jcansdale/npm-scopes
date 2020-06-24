@@ -1,0 +1,26 @@
+on: [push]
+
+jobs:
+  unscoped:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Create unscoped package
+      run: |
+        cat > package.json <<- EOM
+        {
+          "name": "@github/right-pad",
+          "version": "1.0.0",
+          "repository": "https://github.com/${{ github.repository }}"
+        }
+        EOM
+
+    - name: Create .npmrc
+      run: |
+        cat > .npmrc <<- EOM
+        //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}
+        @${{ github.owner }}:registry=https://npm.pkg.github.com
+        EOM
+
+    - name: Publish unscoped package
+      run: npm publish
