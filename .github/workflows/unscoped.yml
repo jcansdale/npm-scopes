@@ -34,10 +34,9 @@ jobs:
     - name: Restore the package
       run: npm install ${{ env.PACKAGE_NAME }}@1.0.0-${{ github.sha }}
 
-  different-scope:
+  scoped:
     env:
-      SCOPE_NAME: different
-      PACKAGE_NAME: scope
+      PACKAGE_NAME: "@${{ github.repository_owner }}/scoped"
 
     runs-on: ubuntu-latest
 
@@ -46,7 +45,7 @@ jobs:
       run: |
         cat > package.json <<- EOM
         {
-          "name": "@${{ env.SCOPE_NAME }}/${{ env.PACKAGE_NAME }}",
+          "name": "${{ env.PACKAGE_NAME }}",
           "version": "1.0.0-${{ github.sha }}",
           "repository": "https://github.com/${{ github.repository }}"
         }
@@ -64,4 +63,4 @@ jobs:
       run: rm package.json
 
     - name: Restore the package
-      run: npm install @${{ env.SCOPE_NAME }}/${{ env.PACKAGE_NAME }}@1.0.0-${{ github.sha }}
+      run: npm install ${{ env.PACKAGE_NAME }}@1.0.0-${{ github.sha }}
