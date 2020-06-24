@@ -10,7 +10,7 @@ jobs:
         cat > package.json <<- EOM
         {
           "name": "@github/right-pad",
-          "version": "1.0.0",
+          "version": "1.0.0-${{ github.sha }}",
           "repository": "https://github.com/${{ github.repository }}"
         }
         EOM
@@ -29,4 +29,4 @@ jobs:
       run: rm package.json
 
     - name: Restore the package
-      run: npm install @github/right-pad
+      run: npm install @github/right-pad@1.0.0-${{ github.sha }}
