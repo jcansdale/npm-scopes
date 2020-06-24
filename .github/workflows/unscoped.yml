@@ -2,6 +2,9 @@ on: [push]
 
 jobs:
   unscoped:
+    env:
+      PACKAGE_NAME: unscoped
+
     runs-on: ubuntu-latest
 
     steps:
@@ -9,7 +12,7 @@ jobs:
       run: |
         cat > package.json <<- EOM
         {
-          "name": "unscoped",
+          "name": "${{ env.PACKAGE_NAME }}",
           "version": "1.0.0-${{ github.sha }}",
           "repository": "https://github.com/${{ github.repository }}"
         }
@@ -29,4 +32,36 @@ jobs:
       run: rm package.json
 
     - name: Restore the package
-      run: npm install unscoped@1.0.0-${{ github.sha }}
+      run: npm install ${{ env.PACKAGE_NAME }}@1.0.0-${{ github.sha }}
+
+  different-scope:
+    env:
+      SCOPE_NAME: different
+      PACKAGE_NAME: scope
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Create different scoped package
+      run: |
+        cat > package.json <<- EOM
+        {
+          "name": "@${{ env.SCOPE_NAME }}/${{ env.PACKAGE_NAME }}",
+          "version": "1.0.0-${{ github.sha }}",
+          "repository": "https://github.com/${{ github.repository }}"
+        }
+        EOM
+    - name: Create .npmrc
+      run: |
+        cat > .npmrc <<- EOM
+        //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}
+        registry=https://npm.pkg.github.com/@${{ github.repository_owner }}
+        EOM
+    - name: Publish different scoped package
+      run: npm publish
+
+    - name: Remove the package
+      run: rm package.json
+
+    - name: Restore the package
+      run: npm install @${{ github.repository_owner }}/@${{ env.SCOPE_NAME }}/${{ env.PACKAGE_NAME }}@1.0.0-${{ github.sha }}
