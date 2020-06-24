@@ -1,0 +1,30 @@
+on: [push]
+
+jobs:
+  unscoped:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Create unscoped package
+      run: |
+        cat > package.json <<- EOM
+        {
+          "name": "@different/scope",
+          "version": "1.0.0-${{ github.sha }}",
+          "repository": "https://github.com/${{ github.repository }}"
+        }
+        EOM
+    - name: Create .npmrc
+      run: |
+        cat > .npmrc <<- EOM
+        //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}
+        registry=https://npm.pkg.github.com/@${{ github.repository_owner }}
+        EOM
+    - name: Publish unscoped package
+      run: npm publish
+
+    - name: Remove the package
+      run: rm package.json
+
+    - name: Restore the package
+      run: npm install @different/scope@1.0.0-${{ github.sha }}
