@@ -1,7 +1,7 @@
 on: [push]
 
 jobs:
-  unscoped:
+  owner-scope:
     runs-on: ubuntu-latest
 
     steps:
@@ -9,7 +9,7 @@ jobs:
       run: |
         cat > package.json <<- EOM
         {
-          "name": "@different/scope",
+          "name": "@${{ github.repository_owner }}/owner-scope",
           "version": "1.0.0-${{ github.sha }}",
           "repository": "https://github.com/${{ github.repository }}"
         }
@@ -27,4 +27,4 @@ jobs:
       run: rm package.json
 
     - name: Restore the package
-      run: npm install @different/scope@1.0.0-${{ github.sha }}
+      run: npm install @${{ github.repository_owner }}/owner-scope@1.0.0-${{ github.sha }}
