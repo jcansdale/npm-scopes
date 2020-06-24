@@ -19,6 +19,7 @@ jobs:
         cat > .npmrc <<- EOM
         //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}
         registry=https://npm.pkg.github.com/@${{ github.repository_owner }}
+        @${{ github.repository_owner }}:registry=https://npm.pkg.github.com
         EOM
     - name: Publish unscoped package
       run: npm publish
