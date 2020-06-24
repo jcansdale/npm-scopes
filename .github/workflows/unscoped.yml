@@ -64,4 +64,4 @@ jobs:
       run: rm package.json
 
     - name: Restore the package
-      run: npm install @${{ github.repository_owner }}/@${{ env.SCOPE_NAME }}/${{ env.PACKAGE_NAME }}@1.0.0-${{ github.sha }}
+      run: npm install @${{ env.SCOPE_NAME }}/${{ env.PACKAGE_NAME }}@1.0.0-${{ github.sha }}
