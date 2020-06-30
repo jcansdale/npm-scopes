@@ -68,7 +68,10 @@ jobs:
   npmjs:
     env:
       PACKAGE_NAME: "@jcansdale/ghvs" # this exists to npmjs.org
-      PACKAGE_SCOPE: "jcansdale"
+    strategy:
+      fail-fast: false
+      matrix:
+        PACKAGE_SCOPE: [jcansdale, jcansdale-test]      
     runs-on: ubuntu-latest
 
     steps:
@@ -76,7 +79,7 @@ jobs:
       run: |
         cat > .npmrc <<- EOM
         //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}
-        registry=https://npm.pkg.github.com/${{ env.PACKAGE_SCOPE }}
+        registry=https://npm.pkg.github.com/${{ matrix.PACKAGE_SCOPE }}
         EOM
 
     - name: Restore package from npmjs
