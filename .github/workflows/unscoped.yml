@@ -22,7 +22,7 @@ jobs:
       run: |
         cat > .npmrc <<- EOM
         //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}
-        registry=https://npm.pkg.github.com/@${{ github.repository_owner }}
+        registry=https://npm.pkg.github.com/@${{ github.repository_owner }}/
         EOM
 
     - name: Publish unscoped package
@@ -54,7 +54,7 @@ jobs:
       run: |
         cat > .npmrc <<- EOM
         //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}
-        registry=https://npm.pkg.github.com/@${{ github.repository_owner }}
+        registry=https://npm.pkg.github.com/@${{ github.repository_owner }}/
         EOM
     - name: Publish different scoped package
       run: npm publish
