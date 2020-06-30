@@ -33,10 +33,7 @@ jobs:
 
     - name: Restore the package
       run: npm install ${{ env.PACKAGE_NAME }}@1.0.0-${{ github.sha }}
-
-    - name: Restore a package from npmjs.org
-      run: npm install left-pad
-
+      
   scoped:
     env:
       PACKAGE_NAME: "@${{ github.repository_owner }}/scoped"
@@ -67,3 +64,20 @@ jobs:
 
     - name: Restore the package
       run: npm install ${{ env.PACKAGE_NAME }}@1.0.0-${{ github.sha }}
+      
+  npmjs:
+    env:
+      PACKAGE_NAME: "@jcansdale/ghvs" # this exists to npmjs.org
+      PACKAGE_SCOPE: "jcansdale"
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Create .npmrc
+      run: |
+        cat > .npmrc <<- EOM
+        //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}
+        registry=https://npm.pkg.github.com/${{ env.PACKAGE_SCOPE }}
+        EOM
+
+    - name: Restore package from npmjs
+      run: npm install ${{ env.PACKAGE_NAME }}
