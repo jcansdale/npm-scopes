@@ -76,7 +76,7 @@ jobs:
       run: |
         cat > .npmrc <<- EOM
         //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}
-        registry=https://npm.pkg.github.com/${{ env.PACKAGE_SCOPE }}
+        registry=https://npm.pkg.github.com/${{ env.PACKAGE_SCOPE }}/
         EOM
 
     - name: Restore package from npmjs
