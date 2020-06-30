@@ -34,6 +34,9 @@ jobs:
     - name: Restore the package
       run: npm install ${{ env.PACKAGE_NAME }}@1.0.0-${{ github.sha }}
 
+    - name: Restore a package from npmjs.org
+      run: npm install left-pad
+
   scoped:
     env:
       PACKAGE_NAME: "@${{ github.repository_owner }}/scoped"
